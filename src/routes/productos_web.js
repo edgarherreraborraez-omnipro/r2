@@ -262,3 +262,44 @@ router.put('/:sku', (req, res) => {
         res.status(400).send("Hubo un error en la creación del objeto");
     }
 });
+
+/**
+ * @swagger
+ * /admin/productos/{sku}:
+ *  delete:
+ *      summary: Elimina un producto
+ *      tags: [Producto]
+ *      parameters:
+ *        - in: path
+ *          name: sku
+ *          schema:
+ *              type: string
+ *          required: true
+ *          description: SKU del producto
+ *      responses:
+ *          200:
+ *              description: Producto eliminado
+ *          404:
+ *              description: Producto no encontrado
+*/
+
+router.delete('/:sku', (req, res) => {
+    const { sku } = req.params;
+    let encontrado = false;
+    let index_delete = -1;
+    underscore.each(productos, (producto, index) => {
+        if(producto.sku == sku){
+            encontrado = true;
+            index_delete = index;
+        }
+    });
+
+    if(encontrado){
+        productos.splice(index_delete);
+        res.status(200).send("Se eliminó el producto satisfactoriamente");
+    }else{
+        res.status(404).send("No hay productos que coincidan con la busqueda");
+    }
+});
+
+module.exports = router;
