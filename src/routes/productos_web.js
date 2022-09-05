@@ -94,3 +94,44 @@ router.get('/', (req, res) => {
         res.status(200).json(productos);
     }
 });
+
+/**
+ * @swagger
+ * /admin/productos/{sku}:
+ *  get:
+ *      summary: Regresa un producto
+ *      tags: [Producto]
+ *      parameters:
+ *        - in: path
+ *          name: sku
+ *          schema:
+ *              type: string
+ *          required: true
+ *          description: SKU del producto
+ *      responses:
+ *          200:
+ *              description: Producto con el SKU indicado
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          $ref: '#/components/schemas/Producto'
+ *          404:
+ *              description: Producto no encontrado
+*/
+
+router.get('/:sku', (req, res) => {
+    const { sku } = req.params;
+    let productos_encontrados = [];
+    underscore.each(productos, (producto, index) => {
+        if(producto.sku == sku){
+            productos_encontrados.push(producto);
+        }
+    });
+
+    if(productos_encontrados.lenght == 0){
+        res.status(404).send("No hay productos que coincidan con su busqueda");
+    }else{
+        res.status(200).json(productos_encontrados);
+    }
+});
