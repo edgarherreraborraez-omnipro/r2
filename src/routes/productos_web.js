@@ -185,3 +185,80 @@ router.get('/:sku', (req, res) => {
         res.status(400).send("Hubo un error en la creación del objeto");
     }
 });
+
+/**
+ * @swagger
+ * /admin/productos/{sku}:
+ *  put:
+ *      summary: Actualiza un producto
+ *      tags: [Producto]
+ *      parameters:
+ *        - in: path
+ *          name: sku
+ *          schema:
+ *              type: string
+ *          required: true
+ *          description: SKU del producto
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      $ref: '#/components/schemas/Producto'
+ *      responses:
+ *          200:
+ *              description: Producto con el SKU indicado
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          $ref: '#/components/schemas/Producto'
+ *          400:
+ *              description: Hubo un error en la creación del objeto
+ *          404:
+ *              description: Producto not found
+*/
+
+router.put('/:sku', (req, res) => {
+    const { sku } = req.params;
+    const { nombre, precio, url, marca, descripcion, iva, descuento, inventario, fecha_creacion } = req.body;
+    let existencias = 0;
+    
+
+    if(nombre && precio && url && marca && descripcion && iva && descuento && inventario && fecha_creacion){
+        
+        underscore.each(productos, (producto, index) => {
+            if(producto.sku == sku){
+                existencias = existencias + 1;
+            }
+        });
+
+        if(existencias==0){
+            res.status(404).send("No existe un producto con ese SKU");
+        }else if(typeof precio != "number" || typeof iva != "number" || typeof descuento != "number" || typeof inventario != "number"){
+            res.status(400).send("Hubo un error en los tipos de datos");
+        }else if(typeof sku != "string" || typeof nombre != "string" || typeof url != "string" || typeof marca != "string" || typeof descripcion != "string" || typeof fecha_creacion != "string"){
+            res.status(400).send("Hubo un error en los tipos de datos");
+        }else if(precio < 1 || iva < 0 || iva > 1 || descuento < 0 || descuento > 1 || inventario < 0){
+            res.status(400).send("Hubo un error en los valores numéricos");
+        }else{
+            underscore.each(productos, (producto, index) => {
+                if(producto.sku == sku){
+                    producto.nombre = nombre;
+                    producto.precio = precio;
+                    producto.url = url;
+                    producto.marca = marca;
+                    producto.descripcion = descripcion;
+                    producto.iva = iva;
+                    producto.descuento = descuento;
+                    producto.inventario = inventario;
+                    producto.fecha_creacion = fecha_creacion;
+                }
+            });
+            res.status(201).send("Se actualizó el producto satisfactoriamente");
+        }
+    }else{
+        res.status(400).send("Hubo un error en la creación del objeto");
+    }
+});
