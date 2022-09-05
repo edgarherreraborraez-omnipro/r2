@@ -135,3 +135,53 @@ router.get('/:sku', (req, res) => {
         res.status(200).json(productos_encontrados);
     }
 });
+
+
+/**
+ * @swagger
+ * /admin/productos:
+ *  post:
+ *      summary: Crea un nuevo producto
+ *      tags: [Producto]
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      $ref: '#/components/schemas/Producto'
+ *      responses:
+ *          201:
+ *              description: Nuevo producto creado
+ *          400:
+ *              description: Hubo un error en la creación del objeto
+ */
+
+ router.post('/', (req, res) => {
+    const {sku, nombre, precio, url, marca, descripcion, iva, descuento, inventario, fecha_creacion} = req.body;
+    let existencias = 0;
+    if(sku && nombre && precio && url && marca && descripcion && iva && inventario && fecha_creacion){
+        
+        underscore.each(productos, (producto, index) => {
+            if(producto.sku == sku){
+                existencias = existencias + 1;
+            }
+        });
+
+        if(existencias>0){
+            res.status(500).send("Ya existe un producto con ese SKU");
+        }else if(typeof precio != "number" || typeof iva != "number" || typeof descuento != "number" || typeof inventario != "number"){
+            res.status(500).send("Hubo un error en los tipos de datos");
+        }else if(typeof sku != "string" || typeof nombre != "string" || typeof url != "string" || typeof marca != "string" || typeof descripcion != "string" || typeof fecha_creacion != "string"){
+            res.status(500).send("Hubo un error en los tipos de datos");
+        }else if(precio < 1 || iva < 0 || iva > 1 || descuento < 0 || descuento > 1 || inventario < 0){
+            res.status(500).send("Hubo un error en los valores numéricos");
+        }else{
+            const nuevo_producto = {...req.body}
+            productos.push(nuevo_producto);
+            res.status(201).send("Se insertó el producto satisfactoriamente");
+        }
+    }else{
+        res.status(400).send("Hubo un error en la creación del objeto");
+    }
+});
