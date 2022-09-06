@@ -136,7 +136,6 @@ router.get('/:sku', (req, res) => {
     }
 });
 
-
 /**
  * @swagger
  * /admin/productos:
