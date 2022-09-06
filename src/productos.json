@@ -1,0 +1,38 @@
+[
+    {
+        "sku":"6938",
+        "nombre": "Zapatos deportivos",
+        "precio": 250000,
+        "url": "/images/feet.jpg",
+        "marca":"Nike",
+        "descripcion":"Zapatos deportivos especiales para tus días de ejercicios. Son cómodos y flexibles, con suela de gamo que ofrece mayor adherencia",
+        "iva": 0.18,
+        "descuento": 0.20,
+        "inventario":5,
+        "fecha_creacion":"2022-08-31"
+    },
+    {
+        "sku":"9327",
+        "nombre": "Camiseta blanca",
+        "precio": 35000,
+        "url": "/images/tshirt.jpg",
+        "marca":"Adidas",
+        "descripcion":"Camiseta para usar en tu día a día",
+        "iva": 0.18,
+        "descuento": 0,
+        "inventario":1,
+        "fecha_creacion":"2022-09-03"
+    },
+    {
+        "sku":"2491",
+        "nombre": "Pantalón de gimnasia",
+        "precio": 67500,
+        "url": "/images/pants.jpg",
+        "marca":"Adidas",
+        "descripcion":"Pantalón que permite la movilidad para ejercicios exigentes",
+        "iva": 0.18,
+        "descuento": 0.1,
+        "inventario":10,
+        "fecha_creacion":"2022-09-03"
+    }
+]

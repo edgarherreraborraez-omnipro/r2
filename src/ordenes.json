@@ -1,0 +1,16 @@
+[
+    {
+        "id":1,
+        "nombre":"Jairo",
+        "apellido":"Pimentel",
+        "total": 439142,
+        "productos":["6938", "9327", "2491"]
+    },
+    {
+        "id": 2,
+        "nombre": "Olga",
+        "apellido": "Wilches",
+        "total":102500,
+        "productos":["9327"]
+    }
+]
