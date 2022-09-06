@@ -81,3 +81,53 @@ router.get('/', (req, res) => {
         res.status(200).json(productos_encontrados);
     }
 });
+
+/**
+ * @swagger
+ * /productos/{sku}:
+ *  get:
+ *      summary: Regresa un producto
+ *      tags: [Producto]
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          schema:
+ *              type: string
+ *          required: true
+ *          description: SKU del producto
+ *      responses:
+ *          200:
+ *              description: Producto con el SKU indicado
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          $ref: '#/components/schemas/Producto'
+            404:
+                description: Producto no encontrado
+*/
+
+router.get('/:sku', (req, res) => {
+    const { sku } = req.params;
+    let productos_encontrados = [];
+    underscore.each(productos, (producto, index) => {
+        if(producto.inventario > 0 && producto.sku == sku){
+            let producto_encontrado = {
+                "nombre": producto.nombre,
+                "sku": producto.sku,
+                "url": producto.url,
+                "marca": producto.marca,
+                "precio_final": producto.precio - (producto.precio * producto.descuento) + (producto.precio * producto.iva)
+            }
+            productos_encontrados.push(producto_encontrado);
+        }
+    });
+
+    if(productos_encontrados == 0){
+        res.status(404).send("No hay productos que coincidan con su busqueda");
+    }else{
+        res.status(200).json(productos_encontrados);
+    }
+});
+
+module.exports = router;
